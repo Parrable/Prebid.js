@@ -43,16 +43,22 @@ function fetchId(configParams, consentData, currentStoredId) {
 
   const callback = function (cb) {
     const onSuccess = (response) => {
-      let eid;
+      let idObj = {};
       if (response) {
         try {
           let responseObj = JSON.parse(response);
-          eid = responseObj ? responseObj.eid : undefined;
+          if (responseObj) {
+            idObj = {
+              ibaOptout: responseObj.ibaOptout,
+              ccpaOptout: responseObj.ccpaOptout,
+              eid: responseObj.eid
+            };
+          }
         } catch (error) {
           utils.logError(error);
         }
       }
-      cb(eid);
+      cb(idObj);
     };
     ajax(PARRABLE_URL, onSuccess, searchParams, options);
   };
@@ -70,11 +76,11 @@ export const parrableIdSubmodule = {
   /**
    * decode the stored id value for passing to bid requests
    * @function
-   * @param {Object|string} value
-   * @return {(Object|undefined}
+   * @param {object} idObj
+   * @return {object}
    */
   decode(value) {
-    return (value && typeof value === 'string') ? { 'parrableid': value } : undefined;
+    return { parrableid: value };
   },
 
   /**

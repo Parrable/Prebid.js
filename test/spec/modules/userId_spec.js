@@ -1203,14 +1203,22 @@ describe('User ID', function() {
     it('callback for submodules that always need to refresh stored id', function(done) {
       let adUnits = [getAdUnitMock()];
       let innerAdUnits;
-      const parrableStoredId = '01.1111111111.test-eid';
-      const parrableRefreshedId = '02.2222222222.test-eid';
-      coreStorage.setCookie('_parrable_eid', parrableStoredId, (new Date(Date.now() + 5000).toUTCString()));
+      const parrableStoredId = {
+        eid: '01.1111111111.test-eid',
+        ibaOptout: false,
+        ccpaOptout: false
+      };
+      const parrableRefreshedId = {
+        eid: '02.2222222222.test-eid',
+        ibaOptout: false,
+        ccpaOptout: false
+      };
+      coreStorage.setCookie('_parrable_eid', JSON.stringify(parrableStoredId), (new Date(Date.now() + 5000).toUTCString()));
 
       const parrableIdSubmoduleMock = {
         name: 'parrableId',
         decode: function(value) {
-          return { 'parrableid': value };
+          return { parrableid: value };
         },
         getId: function() {
           return {
@@ -1244,11 +1252,15 @@ describe('User ID', function() {
       innerAdUnits.forEach(unit => {
         unit.bids.forEach(bid => {
           expect(bid).to.have.deep.nested.property('userId.parrableid');
+<<<<<<< HEAD
           expect(bid.userId.parrableid).to.equal(parrableStoredId);
           expect(bid.userIdAsEids[0]).to.deep.equal({
             source: 'parrable.com',
             uids: [{id: parrableStoredId, atype: 1}]
           });
+=======
+          expect(bid.userId.parrableid).to.deep.equal(parrableStoredId);
+>>>>>>> PBID-11 transform parrable id stored value into an object to enable using optout flags
         });
       });
 
