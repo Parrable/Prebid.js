@@ -1875,7 +1875,7 @@ describe('PubMatic adapter', function () {
             }]);
           });
 
-          it('do not pass if not object', function() {
+          it('do not pass if not an object with props', function() {
             bidRequests[0].userId = {};
             bidRequests[0].userId.parrableid = 1;
             let request = spec.buildRequests(bidRequests, {});
