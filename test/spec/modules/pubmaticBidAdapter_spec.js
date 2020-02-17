@@ -1855,19 +1855,27 @@ describe('PubMatic adapter', function () {
         describe('Parrable Id', function() {
           it('send the Parrable id if it is present', function() {
             bidRequests[0].userId = {};
-            bidRequests[0].userId.parrableid = 'parrable-user-id';
+            bidRequests[0].userId.parrableid = {
+              eid: 'parrable-user-id',
+              ibaOptout: false,
+              ccpaOptout: false
+            };
             let request = spec.buildRequests(bidRequests, {});
             let data = JSON.parse(request.data);
             expect(data.user.eids).to.deep.equal([{
               'source': 'parrable.com',
               'uids': [{
-                'id': 'parrable-user-id',
+                'id': {
+                  eid: 'parrable-user-id',
+                  ibaOptout: false,
+                  ccpaOptout: false
+                },
                 'atype': 1
               }]
             }]);
           });
 
-          it('do not pass if not string', function() {
+          it('do not pass if not object', function() {
             bidRequests[0].userId = {};
             bidRequests[0].userId.parrableid = 1;
             let request = spec.buildRequests(bidRequests, {});

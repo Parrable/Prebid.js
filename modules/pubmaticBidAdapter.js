@@ -646,7 +646,7 @@ function _handleTTDId(eids, validBidRequests) {
  * Produces external userid object in ortb 3.0 model.
  */
 function _addExternalUserId(eids, value, source, atype) {
-  if (utils.isStr(value)) {
+  if (utils.isStr(value) || (source === 'parrable.com' && utils.isPlainObject(value) && !utils.isEmpty(value))) {
     eids.push({
       source,
       uids: [{
