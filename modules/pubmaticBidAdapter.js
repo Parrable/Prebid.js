@@ -642,11 +642,25 @@ function _handleTTDId(eids, validBidRequests) {
   }
 }
 
+function _handleParrableId(eids, validBidRequests) {
+  const bidRequest = validBidRequests[0];
+  const parrableId = utils.deepAccess(bidRequest, 'userId.parrableid');
+  if (utils.isPlainObject(parrableId) && !utils.isEmpty(parrableId)) {
+    eids.push({
+      'source': 'parrable.com',
+      'uids': [{
+        'id': parrableId,
+        'atype': 1
+      }]
+    });
+  }
+}
+
 /**
  * Produces external userid object in ortb 3.0 model.
  */
 function _addExternalUserId(eids, value, source, atype) {
-  if (utils.isStr(value) || (source === 'parrable.com' && utils.isPlainObject(value) && !utils.isEmpty(value))) {
+  if (utils.isStr(value)) {
     eids.push({
       source,
       uids: [{
@@ -661,6 +675,7 @@ function _handleEids(payload, validBidRequests) {
   let eids = [];
   _handleDigitrustId(eids);
   _handleTTDId(eids, validBidRequests);
+  _handleParrableId(eids, validBidRequests);
   const bidRequest = validBidRequests[0];
   if (bidRequest && bidRequest.userId) {
     _addExternalUserId(eids, utils.deepAccess(bidRequest, `userId.pubcid`), 'pubcid.org', 1);
@@ -669,7 +684,6 @@ function _handleEids(payload, validBidRequests) {
     _addExternalUserId(eids, utils.deepAccess(bidRequest, `userId.criteoId`), 'criteo.com', 1);// replacing criteoRtus
     _addExternalUserId(eids, utils.deepAccess(bidRequest, `userId.idl_env`), 'liveramp.com', 1);
     _addExternalUserId(eids, utils.deepAccess(bidRequest, `userId.lipb.lipbid`), 'liveintent.com', 1);
-    _addExternalUserId(eids, utils.deepAccess(bidRequest, `userId.parrableid`), 'parrable.com', 1);
     _addExternalUserId(eids, utils.deepAccess(bidRequest, `userId.britepoolid`), 'britepool.com', 1);
     _addExternalUserId(eids, utils.deepAccess(bidRequest, `userId.netId`), 'netid.de', 1);
   }
