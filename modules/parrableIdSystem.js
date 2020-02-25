@@ -36,10 +36,10 @@ function serializeParrableId(idObj) {
 
 function deserializeParrableId(value) {
   const idObj = {};
-  var values = decodeURIComponent(value).split(',');
+  const values = decodeURIComponent(value).split(',');
 
   values.forEach(function(value) {
-    var obj = value.split(':');
+    const obj = value.split(':');
     idObj[obj[0]] = +obj[1] === 1 ? true : obj[1];
   });
 
