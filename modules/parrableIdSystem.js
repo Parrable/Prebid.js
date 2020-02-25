@@ -24,6 +24,8 @@ function isValidConfig(configParams) {
 }
 
 function serializeParrableId(idObj) {
+  if (!idObj.eid) return '';
+
   let str = 'eid:' + idObj.eid;
   if (idObj.ibaOptout) {
     str += ',ibaOptout:1';
