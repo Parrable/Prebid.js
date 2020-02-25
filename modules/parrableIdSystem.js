@@ -23,6 +23,29 @@ function isValidConfig(configParams) {
   return true;
 }
 
+function serializeParrableId(parrableId) {
+  let str = 'eid:' + parrableId.eid;
+  if (parrableId.ibaOptout) {
+    str += ',ibaOptout:1';
+  }
+  if (parrableId.ccpaOptout) {
+    str += ',ccpaOptout:1';
+  }
+  return encodeURIComponent(str);
+}
+
+function deserializeParrableId(value) {
+  const idObj = {};
+  var values = decodeURIComponent(value).split(',');
+
+  values.forEach(function(value) {
+    var obj = value.split(':');
+    parrableId[obj[0]] = +obj[1] === 1 ? true : obj[1];
+  });
+
+  return parrableId;
+}
+
 function fetchId(configParams, consentData, currentStoredId) {
   if (!isValidConfig(configParams)) return;
 
@@ -58,7 +81,7 @@ function fetchId(configParams, consentData, currentStoredId) {
           utils.logError(error);
         }
       }
-      cb(idObj);
+      cb(serializeParrableId(idObj));
     };
     ajax(PARRABLE_URL, onSuccess, searchParams, options);
   };
@@ -80,7 +103,7 @@ export const parrableIdSubmodule = {
    * @return {object}
    */
   decode(value) {
-    return { parrableid: value };
+    return { parrableid: deserializeParrableId(value) };
   },
 
   /**
