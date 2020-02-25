@@ -69,7 +69,9 @@ describe('Parrable ID System', function() {
         adUnits.forEach(unit => {
           unit.bids.forEach(bid => {
             expect(bid).to.have.deep.nested.property('userId.parrableid');
-            expect(bid.userId.parrableid).to.equal('01.1563917337.test-eid');
+            expect(bid.userId.parrableid).to.deep.equal({
+              eid: '01.1563917337.test-eid'
+            });
           });
         });
         storage.setCookie(P_COOKIE_NAME, '', EXPIRED_COOKIE_DATE);
