@@ -1278,15 +1278,11 @@ describe('User ID', function() {
       innerAdUnits.forEach(unit => {
         unit.bids.forEach(bid => {
           expect(bid).to.have.deep.nested.property('userId.parrableid');
-<<<<<<< HEAD
           expect(bid.userId.parrableid).to.equal(parrableStoredId);
           expect(bid.userIdAsEids[0]).to.deep.equal({
             source: 'parrable.com',
             uids: [{id: parrableStoredId, atype: 1}]
           });
-=======
-          expect(bid.userId.parrableid).to.deep.equal(parrableStoredId);
->>>>>>> PBID-11 transform parrable id stored value into an object to enable using optout flags
         });
       });
 
