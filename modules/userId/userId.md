@@ -41,7 +41,7 @@ pbjs.setConfig({
             },
             storage: {
                 type: 'cookie',
-                name: '_parrable_eid',
+                name: '_parrable_id',
                 expires: 365
             }
         }, {

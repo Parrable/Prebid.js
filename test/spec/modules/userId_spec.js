@@ -1141,7 +1141,7 @@ describe('User ID', function() {
       sinon.stub(utils, 'triggerPixel');
       coreStorage.setCookie('pubcid', '', EXPIRED_COOKIE_DATE);
       coreStorage.setCookie('unifiedid', '', EXPIRED_COOKIE_DATE);
-      coreStorage.setCookie('_parrable_eid', '', EXPIRED_COOKIE_DATE);
+      coreStorage.setCookie('_parrable_id', '', EXPIRED_COOKIE_DATE);
     });
 
     afterEach(function() {
@@ -1149,7 +1149,7 @@ describe('User ID', function() {
       utils.triggerPixel.restore();
       coreStorage.setCookie('pubcid', '', EXPIRED_COOKIE_DATE);
       coreStorage.setCookie('unifiedid', '', EXPIRED_COOKIE_DATE);
-      coreStorage.setCookie('_parrable_eid', '', EXPIRED_COOKIE_DATE);
+      coreStorage.setCookie('_parrable_id', '', EXPIRED_COOKIE_DATE);
     });
 
     it('pubcid callback with url', function () {
@@ -1213,7 +1213,7 @@ describe('User ID', function() {
         ibaOptout: false,
         ccpaOptout: false
       };
-      coreStorage.setCookie('_parrable_eid', JSON.stringify(parrableStoredId), (new Date(Date.now() + 5000).toUTCString()));
+      coreStorage.setCookie('_parrable_id', JSON.stringify(parrableStoredId), (new Date(Date.now() + 5000).toUTCString()));
 
       const parrableIdSubmoduleMock = {
         name: 'parrableId',
@@ -1236,7 +1236,7 @@ describe('User ID', function() {
             name: 'parrableId',
             storage: {
               type: 'cookie',
-              name: '_parrable_eid'
+              name: '_parrable_id'
             }
           }]
         }
@@ -1252,15 +1252,11 @@ describe('User ID', function() {
       innerAdUnits.forEach(unit => {
         unit.bids.forEach(bid => {
           expect(bid).to.have.deep.nested.property('userId.parrableid');
-<<<<<<< HEAD
           expect(bid.userId.parrableid).to.equal(parrableStoredId);
           expect(bid.userIdAsEids[0]).to.deep.equal({
             source: 'parrable.com',
             uids: [{id: parrableStoredId, atype: 1}]
           });
-=======
-          expect(bid.userId.parrableid).to.deep.equal(parrableStoredId);
->>>>>>> PBID-11 transform parrable id stored value into an object to enable using optout flags
         });
       });
 
