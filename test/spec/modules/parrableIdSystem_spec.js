@@ -9,7 +9,7 @@ const storage = newStorageManager();
 
 const EXPIRED_COOKIE_DATE = 'Thu, 01 Jan 1970 00:00:01 GMT';
 const P_COOKIE_NAME = '_parrable_eid';
-const P_COOKIE_VALUE = '01.1563917337.test-eid';
+const P_COOKIE_VALUE = 'eid%3A01.1563917337.test-eid';
 const P_CONFIG_MOCK = {
   name: 'parrableId',
   params: {
@@ -69,7 +69,9 @@ describe('Parrable ID System', function() {
         adUnits.forEach(unit => {
           unit.bids.forEach(bid => {
             expect(bid).to.have.deep.nested.property('userId.parrableid');
-            expect(bid.userId.parrableid).to.equal(P_COOKIE_VALUE);
+            expect(bid.userId.parrableid).to.deep.equal({
+              eid: '01.1563917337.test-eid'
+            });
           });
         });
         storage.setCookie(P_COOKIE_NAME, '', EXPIRED_COOKIE_DATE);
