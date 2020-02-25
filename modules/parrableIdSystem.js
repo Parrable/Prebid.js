@@ -23,8 +23,8 @@ function isValidConfig(configParams) {
   return true;
 }
 
-function serializeParrableId(parrableId) {
-  let str = 'eid:' + parrableId.eid;
+function serializeParrableId(idObj) {
+  let str = 'eid:' + idObj.eid;
   if (parrableId.ibaOptout) {
     str += ',ibaOptout:1';
   }
