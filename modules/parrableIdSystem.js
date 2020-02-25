@@ -25,10 +25,10 @@ function isValidConfig(configParams) {
 
 function serializeParrableId(idObj) {
   let str = 'eid:' + idObj.eid;
-  if (parrableId.ibaOptout) {
+  if (idObj.ibaOptout) {
     str += ',ibaOptout:1';
   }
-  if (parrableId.ccpaOptout) {
+  if (idObj.ccpaOptout) {
     str += ',ccpaOptout:1';
   }
   return encodeURIComponent(str);
@@ -40,10 +40,10 @@ function deserializeParrableId(value) {
 
   values.forEach(function(value) {
     var obj = value.split(':');
-    parrableId[obj[0]] = +obj[1] === 1 ? true : obj[1];
+    idObj[obj[0]] = +obj[1] === 1 ? true : obj[1];
   });
 
-  return parrableId;
+  return idObj;
 }
 
 function fetchId(configParams, consentData, currentStoredId) {
