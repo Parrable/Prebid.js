@@ -52,7 +52,7 @@ function fetchId(configParams, consentData, currentStoredId) {
   if (!isValidConfig(configParams)) return;
 
   const data = {
-    eid: currentStoredId || null,
+    eid: currentStoredId ? deserializeParrableId(currentStoredId) : null,
     trackers: configParams.partner.split(',')
   };
 
