@@ -1865,11 +1865,7 @@ describe('PubMatic adapter', function () {
             expect(data.user.eids).to.deep.equal([{
               'source': 'parrable.com',
               'uids': [{
-                'id': {
-                  eid: 'parrable-user-id',
-                  ibaOptout: false,
-                  ccpaOptout: false
-                },
+                'id': 'parrable-user-id',
                 'atype': 1
               }]
             }]);
