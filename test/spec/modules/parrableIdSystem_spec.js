@@ -1,11 +1,15 @@
 import { expect } from 'chai';
-import {config} from 'src/config.js';
-import * as utils from 'src/utils.js';
+import {config} from 'src/config';
+import * as utils from 'src/utils';
+import events from 'src/events';
+import CONSTANTS from 'src/constants.json';
 import { init, requestBidsHook, setSubmoduleRegistry } from 'modules/userId/index.js';
 import { parrableIdSubmodule } from 'modules/parrableIdSystem.js';
 import { newStorageManager } from 'src/storageManager.js';
 
 const storage = newStorageManager();
+
+import {server} from 'test/mocks/xhr';
 
 const EXPIRED_COOKIE_DATE = 'Thu, 01 Jan 1970 00:00:01 GMT';
 const P_COOKIE_NAME = '_parrable_eid';
@@ -51,7 +55,20 @@ describe('Parrable ID System', function() {
 
     beforeEach(function() {
       adUnits = [getAdUnitMock()];
+      window.__uspapi = function(cmd, v, cb) {
+        if (v === 1) {
+          const mockResponse = {
+            version: 1,
+            uspString: '1YNN'
+          };
+          cb(mockResponse, true);
+        }
+      };
     });
+
+    afterEach(function() {
+      delete window.__uspapi;
+    })
 
     it('should append parrableid to bid request', function(done) {
       // simulate existing browser local storage values
@@ -73,6 +90,10 @@ describe('Parrable ID System', function() {
           });
         });
         storage.setCookie(P_COOKIE_NAME, '', EXPIRED_COOKIE_DATE);
+
+        events.emit(CONSTANTS.EVENTS.AUCTION_END, {});
+        const [usPrivacyQuery] = server.requests[0].url.split('&').filter((p) => p.includes('us_privacy'));
+        expect(usPrivacyQuery.split('=')[1]).to.equal('1YNN');
         done();
       }, { adUnits });
     });
