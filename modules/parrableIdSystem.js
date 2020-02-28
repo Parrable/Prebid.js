@@ -105,7 +105,7 @@ export const parrableIdSubmodule = {
    * @return {object}
    */
   decode(value) {
-    return { parrableid: deserializeParrableId(value) };
+    return { parrableid: deserializeParrableId(value).eid };
   },
 
   /**

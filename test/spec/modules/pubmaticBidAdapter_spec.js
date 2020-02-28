@@ -1855,11 +1855,7 @@ describe('PubMatic adapter', function () {
         describe('Parrable Id', function() {
           it('send the Parrable id if it is present', function() {
             bidRequests[0].userId = {};
-            bidRequests[0].userId.parrableid = {
-              eid: 'parrable-user-id',
-              ibaOptout: false,
-              ccpaOptout: false
-            };
+            bidRequests[0].userId.parrableid = 'parrable-user-id';
             let request = spec.buildRequests(bidRequests, {});
             let data = JSON.parse(request.data);
             expect(data.user.eids).to.deep.equal([{

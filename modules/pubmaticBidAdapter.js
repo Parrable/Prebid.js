@@ -645,11 +645,11 @@ function _handleTTDId(eids, validBidRequests) {
 function _handleParrableId(eids, validBidRequests) {
   const bidRequest = validBidRequests[0];
   const parrableId = utils.deepAccess(bidRequest, 'userId.parrableid');
-  if (utils.isPlainObject(parrableId) && !utils.isEmpty(parrableId)) {
+  if (utils.isStr(parrableId)) {
     eids.push({
       'source': 'parrable.com',
       'uids': [{
-        'id': parrableId.eid,
+        'id': parrableId,
         'atype': 1
       }]
     });
