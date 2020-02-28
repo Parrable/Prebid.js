@@ -92,8 +92,7 @@ describe('Parrable ID System', function() {
         storage.setCookie(P_COOKIE_NAME, '', EXPIRED_COOKIE_DATE);
 
         events.emit(CONSTANTS.EVENTS.AUCTION_END, {});
-        const [usPrivacyQuery] = server.requests[0].url.split('&').filter((p) => p.includes('us_privacy'));
-        expect(usPrivacyQuery.split('=')[1]).to.equal('1YNN');
+        expect(server.requests[0].url).to.include('&us_privacy=1YNN');
         done();
       }, { adUnits });
     });
