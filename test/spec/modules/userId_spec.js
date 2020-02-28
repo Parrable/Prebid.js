@@ -1213,17 +1213,43 @@ describe('User ID', function() {
         ibaOptout: false,
         ccpaOptout: false
       };
-      coreStorage.setCookie('_parrable_id', JSON.stringify(parrableStoredId), (new Date(Date.now() + 5000).toUTCString()));
+
+      function serializeParrableId(idObj) {
+        if (!idObj.eid) return '';
+
+        let str = 'eid:' + idObj.eid;
+        if (idObj.ibaOptout) {
+          str += ',ibaOptout:1';
+        }
+        if (idObj.ccpaOptout) {
+          str += ',ccpaOptout:1';
+        }
+        return encodeURIComponent(str);
+      }
+
+      function deserializeParrableId(value) {
+        const idObj = {};
+        const values = decodeURIComponent(value).split(',');
+
+        values.forEach(function(value) {
+          const obj = value.split(':');
+          idObj[obj[0]] = +obj[1] === 1 ? true : obj[1];
+        });
+
+        return idObj;
+      }
+
+      coreStorage.setCookie('_parrable_id', serializeParrableId(parrableStoredId), (new Date(Date.now() + 5000).toUTCString()));
 
       const parrableIdSubmoduleMock = {
         name: 'parrableId',
         decode: function(value) {
-          return { parrableid: value };
+          return { parrableid: deserializeParrableId(value).eid };
         },
         getId: function() {
           return {
             callback: function(cb) {
-              cb(parrableRefreshedId);
+              cb(serializeParrableId(parrableRefreshedId));
             }
           };
         }
