@@ -48,6 +48,20 @@ function deserializeParrableId(value) {
   return idObj;
 }
 
+function getUspString(cb) {
+  if (typeof window.__uspapi === 'function') {
+    window.__uspapi('getUSPData', 1, function(uspData, success) {
+      if (success) {
+        cb(uspData.uspString);
+      } else {
+        cb(null);
+      }
+    });
+  } else {
+    cb(null);
+  }
+}
+
 function fetchId(configParams, consentData, currentStoredId) {
   if (!isValidConfig(configParams)) return;
 
@@ -85,7 +99,13 @@ function fetchId(configParams, consentData, currentStoredId) {
       }
       cb(serializeParrableId(idObj));
     };
-    ajax(PARRABLE_URL, onSuccess, searchParams, options);
+
+    getUspString(function(uspString) {
+      if (uspString) {
+        searchParams.us_privacy = uspString;
+      }
+      ajax(PARRABLE_URL, onSuccess, searchParams, options);
+    });
   };
 
   return { callback };
