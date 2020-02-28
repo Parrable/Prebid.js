@@ -649,7 +649,7 @@ function _handleParrableId(eids, validBidRequests) {
     eids.push({
       'source': 'parrable.com',
       'uids': [{
-        'id': parrableId.eid,
+        'id': parrableId,
         'atype': 1
       }]
     });
