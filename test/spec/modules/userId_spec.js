@@ -1278,10 +1278,10 @@ describe('User ID', function() {
       innerAdUnits.forEach(unit => {
         unit.bids.forEach(bid => {
           expect(bid).to.have.deep.nested.property('userId.parrableid');
-          expect(bid.userId.parrableid).to.equal(parrableStoredId);
+          expect(bid.userId.parrableid).to.equal(parrableStoredId.eid);
           expect(bid.userIdAsEids[0]).to.deep.equal({
             source: 'parrable.com',
-            uids: [{id: parrableStoredId, atype: 1}]
+            uids: [{id: parrableStoredId.eid, atype: 1}]
           });
         });
       });
@@ -1297,7 +1297,7 @@ describe('User ID', function() {
               expect(bid.userId.parrableid).to.equal(parrableRefreshedId.eid);
               expect(bid.userIdAsEids[0]).to.deep.equal({
                 source: 'parrable.com',
-                uids: [{id: parrableRefreshedId, atype: 1}]
+                uids: [{id: parrableRefreshedId.eid, atype: 1}]
               });
             });
           });
