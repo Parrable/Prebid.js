@@ -1294,7 +1294,7 @@ describe('User ID', function() {
           innerAdUnits.forEach(unit => {
             unit.bids.forEach(bid => {
               expect(bid).to.have.deep.nested.property('userId.parrableid');
-              expect(bid.userId.parrableid).to.equal(parrableRefreshedId);
+              expect(bid.userId.parrableid).to.equal(parrableRefreshedId.eid);
               expect(bid.userIdAsEids[0]).to.deep.equal({
                 source: 'parrable.com',
                 uids: [{id: parrableRefreshedId, atype: 1}]
