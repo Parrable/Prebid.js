@@ -6,8 +6,9 @@
  */
 
 import * as utils from '../src/utils.js'
-import {ajax} from '../src/ajax.js';
-import {submodule} from '../src/hook.js';
+import { ajax } from '../src/ajax.js';
+import { submodule } from '../src/hook.js';
+import { getRefererInfo } from '../src/refererDetection.js';
 
 const PARRABLE_URL = 'https://h.parrable.com/prebid';
 
@@ -51,9 +52,12 @@ function deserializeParrableId(value) {
 function fetchId(configParams, consentData, currentStoredId) {
   if (!isValidConfig(configParams)) return;
 
+  const { referer } = getRefererInfo();
+
   const data = {
     eid: (currentStoredId && deserializeParrableId(currentStoredId).eid) || null,
-    trackers: configParams.partner.split(',')
+    trackers: configParams.partner.split(','),
+    url: referer
   };
 
   const searchParams = {
