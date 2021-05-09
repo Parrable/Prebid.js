@@ -75,7 +75,6 @@ function writeParrableCookie(parrableId) {
     (new Date(Date.now() + 5000).toUTCString()),
     'lax'
   );
-  console.log(`spec#writeParrableCookie ${storage.getCookie(P_COOKIE_NAME)}`);
 }
 
 function removeParrableCookie() {
