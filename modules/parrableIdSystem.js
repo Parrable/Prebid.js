@@ -281,6 +281,8 @@ function fetchId(configParams, gdprConsentData) {
               console.log(`module#fetchId. responseObj: ${responseObj.tpcSupport}. If this is null the problem is here`);
               if (responseObj.tpcSupport !== undefined) {
                 newParams.tpcSupport = responseObj.tpcSupport;
+                console.log(`module#fetchId. responseObj.tpcSupportTtl: ${responseObj.tpcSupportTtl}`);
+                console.log(`module#fetchId. tpcUntil: ${epochFromTtl(responseObj.tpcSupportTtl)}`);
                 newParams.tpcUntil = epochFromTtl(responseObj.tpcSupportTtl);
               }
             }
