@@ -32,7 +32,7 @@ aliases:
 
   - &run_unit_test
       name: BrowserStack testing
-      command: gulp test --browsers 'bs_chrome_89_windows_10' --nolintfix
+      command: gulp test --browsers=chrome --nolintfix
 
   - &run_endtoend_test
       name: BrowserStack End to end testing
