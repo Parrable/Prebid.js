@@ -282,6 +282,8 @@ function fetchId(configParams, gdprConsentData) {
               if (responseObj.tpcSupport !== undefined) {
                 newParams.tpcSupport = responseObj.tpcSupport;
                 console.log(`module#fetchId. responseObj.tpcSupportTtl: ${responseObj.tpcSupportTtl}`);
+                console.log(`module#fetchId. tpcUntil: ${(Date.now() / 1000) + responseObj.tpcSupportTtl}`);
+                console.log(`module#fetchId. tpcUntil: ${Math.trunc((Date.now() / 1000) + responseObj.tpcSupportTtl)}`);
                 console.log(`module#fetchId. tpcUntil: ${epochFromTtl(responseObj.tpcSupportTtl)}`);
                 newParams.tpcUntil = epochFromTtl(responseObj.tpcSupportTtl);
               }
