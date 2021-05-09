@@ -63,6 +63,7 @@ function serializeParrableId(parrableId) {
     str += `,${tpcSupportComponent}`;
     str += `,tpcUntil:${parrableId.tpcUntil}`;
   }
+  console.log(`spec#serializeParrableId. Cookie is: ${str}`);
   return str;
 }
 
@@ -74,6 +75,7 @@ function writeParrableCookie(parrableId) {
     (new Date(Date.now() + 5000).toUTCString()),
     'lax'
   );
+  console.log(`spec#writeParrableCookie ${storage.getCookie(P_COOKIE_NAME)}`);
 }
 
 function removeParrableCookie() {
@@ -248,7 +250,7 @@ describe('Parrable ID System', function() {
       });
     });
 
-    describe('third party cookie support status', function () {
+    describe.only('third party cookie support status', function () {
       let logErrorStub;
       let callbackSpy = sinon.spy();
 
@@ -265,7 +267,8 @@ describe('Parrable ID System', function() {
         logErrorStub.restore();
       });
 
-      describe('when getting tpcSupport from XHR response', function () {
+      describe.only('when getting tpcSupport from XHR response', function () {
+        console.log('DESCRIBE: when getting tpcSupport from XHR response');
         let request;
         let dateNowStub;
         const dateNowMock = Date.now();
@@ -280,6 +283,7 @@ describe('Parrable ID System', function() {
         });
 
         it('should set tpcSupport: true and tpcUntil in the cookie', function () {
+          console.log('IT: should set tpcSupport: true and tpcUntil in the cookie');
           let { callback } = parrableIdSubmodule.getId(P_CONFIG_MOCK);
           callback(callbackSpy);
           request = server.requests[0];
@@ -296,6 +300,7 @@ describe('Parrable ID System', function() {
         });
 
         it('should set tpcSupport: false and tpcUntil in the cookie', function () {
+          console.log('IT: should set tpcSupport: false and tpcUntil in the cookie');
           let { callback } = parrableIdSubmodule.getId(P_CONFIG_MOCK);
           callback(callbackSpy);
           request = server.requests[0];
@@ -311,6 +316,7 @@ describe('Parrable ID System', function() {
         });
 
         it('should not set tpcSupport in the cookie', function () {
+          console.log('IT: should not set tpcSupport in the cookie');
           let { callback } = parrableIdSubmodule.getId(P_CONFIG_MOCK);
           callback(callbackSpy);
           request = server.requests[0];
@@ -328,6 +334,7 @@ describe('Parrable ID System', function() {
       });
 
       describe('when getting tpcSupport from cookie', function () {
+        console.log('DESCRIBE: when getting tpcSupport from cookie');
         let request;
         let dateNowStub;
         const dateNowMock = Date.now();
@@ -343,6 +350,7 @@ describe('Parrable ID System', function() {
         });
 
         it('should send tpcSupport in the XHR', function () {
+          console.log('IT: should send tpcSupport in the XHR');
           writeParrableCookie({
             eid: P_COOKIE_EID,
             tpc: true,
@@ -355,10 +363,12 @@ describe('Parrable ID System', function() {
           let queryParams = utils.parseQS(request.url.split('?')[1]);
           let data = JSON.parse(atob(decodeBase64UrlSafe(queryParams.data)));
 
+          console.log(`spec#should send tpcSupport in the XHR ${data}`);
           expect(data.tpcSupport).to.equal(true);
         });
 
         it('should unset tpcSupport from cookie when tpcUntil reached', function () {
+          console.log('IT: should unset tpcSupport from cookie when tpcUntil reached');
           writeParrableCookie({
             eid: P_COOKIE_EID,
             tpcSupport: true,
@@ -376,6 +386,8 @@ describe('Parrable ID System', function() {
 
           let queryParams = utils.parseQS(request.url.split('?')[1]);
           let data = JSON.parse(atob(decodeBase64UrlSafe(queryParams.data)));
+
+          console.log(`spec#should unset tpcSupport from cookie when tpcUntil reached ${data}`);
 
           expect(data.tpcSupport).to.equal(undefined);
           expect(storage.getCookie(P_COOKIE_NAME)).to.equal(

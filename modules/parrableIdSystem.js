@@ -94,6 +94,7 @@ function encodeBase64UrlSafe(base64) {
 
 function readCookie() {
   const parrableIdStr = storage.getCookie(PARRABLE_COOKIE_NAME);
+  console.log(`module#readCookie. parrableIdStr: ${parrableIdStr}`);
   if (parrableIdStr) {
     const parsedCookie = deserializeParrableId(decodeURIComponent(parrableIdStr));
     const { tpc, tpcUntil, ...parrableId } = parsedCookie;
@@ -102,15 +103,18 @@ function readCookie() {
     if ((Date.now() / 1000) >= tpcUntil) {
       params.tpc = undefined;
     }
+    console.log(`module#readCookie. parrableId: ${parrableId} - params: ${params}`);
     return { parrableId, params };
   }
   return null;
 }
 
 function writeCookie(parrableIdAndParams) {
+  console.log(`spec#writeCookie. parrableIdAndParams: ${document.getCookie(P_COOKIE_NAME)}`);
   if (parrableIdAndParams) {
     const parrableIdStr = encodeURIComponent(serializeParrableId(parrableIdAndParams));
     storage.setCookie(PARRABLE_COOKIE_NAME, parrableIdStr, getExpirationDate(), 'lax');
+    console.log(`spec#writeCookie. cookie: ${storage.getCookie(PARRABLE_COOKIE_NAME)}`);
   }
 }
 
@@ -230,6 +234,8 @@ function fetchId(configParams, gdprConsentData) {
     tpcSupport
   };
 
+  console.log(`module#fetchId. data: ${data}`);
+
   const searchParams = {
     data: encodeBase64UrlSafe(btoa(JSON.stringify(data))),
     gdpr: gdprApplies ? 1 : 0,
@@ -267,6 +273,8 @@ function fetchId(configParams, gdprConsentData) {
               if (responseObj.ibaOptout === true) {
                 newParrableId.ibaOptout = true;
               }
+              console.log(`module#fetchId. responseObj: ${responseObj}`);
+              console.log(`module#fetchId. responseObj: ${responseObj.tpcSupport}. If this is null the problem is here`);
               if (responseObj.tpcSupport !== undefined) {
                 newParams.tpcSupport = responseObj.tpcSupport;
                 newParams.tpcUntil = epochFromTtl(responseObj.tpcSupportTtl);

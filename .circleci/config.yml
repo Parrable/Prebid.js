@@ -3,7 +3,7 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 
-aliases: 
+aliases:
   - &environment
       docker:
         # specify the version you desire here
@@ -32,7 +32,7 @@ aliases:
 
   - &run_unit_test
       name: BrowserStack testing
-      command: gulp test --browserstack --nolintfix
+      command: gulp test --browsers 'chrome' --nolintfix
 
   - &run_endtoend_test
       name: BrowserStack End to end testing
@@ -72,7 +72,7 @@ jobs:
   build:
     <<: *environment
     steps: *unit_test_steps
-      
+
   e2etest:
     <<: *environment
     steps: *endtoend_test_steps
