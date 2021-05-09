@@ -100,6 +100,10 @@ function readCookie() {
     const { tpc, tpcUntil, ...parrableId } = parsedCookie;
     let { eid, ibaOptout, ccpaOptout, ...params } = parsedCookie;
 
+    console.log(`module#readCookie. (Date.now() / 1000) >= tpcUntil: ${(Date.now() / 1000) >= tpcUntil}`);
+    console.log(`module#readCookie. (Date.now() / 1000) ${(Date.now() / 1000)}`);
+    console.log(`module#readCookie. tpcUntil: ${tpcUntil}`);
+
     if ((Date.now() / 1000) >= tpcUntil) {
       params.tpc = undefined;
     }
@@ -110,7 +114,7 @@ function readCookie() {
 }
 
 function writeCookie(parrableIdAndParams) {
-  console.log(`module#writeCookie. parrableIdAndParams: ${parrableIdAndParams}`);
+  console.log(`module#writeCookie. parrableIdAndParams: ${JSON.stringify(parrableIdAndParams)}`);
   if (parrableIdAndParams) {
     const parrableIdStr = encodeURIComponent(serializeParrableId(parrableIdAndParams));
     storage.setCookie(PARRABLE_COOKIE_NAME, parrableIdStr, getExpirationDate(), 'lax');
