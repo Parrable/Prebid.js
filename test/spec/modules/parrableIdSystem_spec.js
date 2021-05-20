@@ -1,3 +1,4 @@
+
 import { expect } from 'chai';
 import find from 'core-js-pure/features/array/find.js';
 import { config } from 'src/config.js';
@@ -714,4 +715,3 @@ describe('Parrable ID System', function() {
     });
   });
 });
-
