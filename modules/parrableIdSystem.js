@@ -94,23 +94,31 @@ function encodeBase64UrlSafe(base64) {
 
 function readCookie() {
   const parrableIdStr = storage.getCookie(PARRABLE_COOKIE_NAME);
+  console.log(`module#readCookie. parrableIdStr: ${parrableIdStr}`);
   if (parrableIdStr) {
     const parsedCookie = deserializeParrableId(decodeURIComponent(parrableIdStr));
     const { tpc, tpcUntil, ...parrableId } = parsedCookie;
     let { eid, ibaOptout, ccpaOptout, ...params } = parsedCookie;
 
+    console.log(`module#readCookie. (Date.now() / 1000) >= tpcUntil: ${(Date.now() / 1000) >= tpcUntil}`);
+    console.log(`module#readCookie. (Date.now() / 1000) ${(Date.now() / 1000)}`);
+    console.log(`module#readCookie. tpcUntil: ${tpcUntil}`);
+
     if ((Date.now() / 1000) >= tpcUntil) {
       params.tpc = undefined;
     }
+    console.log(`module#readCookie. parrableId: ${parrableId} - params: ${params}`);
     return { parrableId, params };
   }
   return null;
 }
 
 function writeCookie(parrableIdAndParams) {
+  console.log(`module#writeCookie. parrableIdAndParams: ${JSON.stringify(parrableIdAndParams)}`);
   if (parrableIdAndParams) {
     const parrableIdStr = encodeURIComponent(serializeParrableId(parrableIdAndParams));
     storage.setCookie(PARRABLE_COOKIE_NAME, parrableIdStr, getExpirationDate(), 'lax');
+    console.log(`module#writeCookie. cookie: ${storage.getCookie(PARRABLE_COOKIE_NAME)}`);
   }
 }
 
@@ -230,6 +238,8 @@ function fetchId(configParams, gdprConsentData) {
     tpcSupport
   };
 
+  console.log(`module#fetchId. data: ${JSON.stringify(data)}`);
+
   const searchParams = {
     data: encodeBase64UrlSafe(btoa(JSON.stringify(data))),
     gdpr: gdprApplies ? 1 : 0,
@@ -267,8 +277,14 @@ function fetchId(configParams, gdprConsentData) {
               if (responseObj.ibaOptout === true) {
                 newParrableId.ibaOptout = true;
               }
+              console.log(`module#fetchId. responseObj: ${JSON.stringify(responseObj)}`);
+              console.log(`module#fetchId. responseObj: ${responseObj.tpcSupport}. If this is null the problem is here`);
               if (responseObj.tpcSupport !== undefined) {
                 newParams.tpcSupport = responseObj.tpcSupport;
+                console.log(`module#fetchId. responseObj.tpcSupportTtl: ${responseObj.tpcSupportTtl}`);
+                console.log(`module#fetchId. tpcUntil: ${(Date.now() / 1000) + responseObj.tpcSupportTtl}`);
+                console.log(`module#fetchId. tpcUntil: ${Math.floor((Date.now() / 1000) + responseObj.tpcSupportTtl)}`);
+                console.log(`module#fetchId. tpcUntil: ${epochFromTtl(responseObj.tpcSupportTtl)}`);
                 newParams.tpcUntil = epochFromTtl(responseObj.tpcSupportTtl);
               }
             }
