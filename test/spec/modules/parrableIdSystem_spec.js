@@ -72,7 +72,7 @@ function writeParrableCookie(parrableId) {
   storage.setCookie(
     P_COOKIE_NAME,
     cookieValue,
-    (new Date(Date.now() + 5000).toUTCString()),
+    (new Date(Date.now() + 60000).toUTCString()),
     'lax'
   );
 }
