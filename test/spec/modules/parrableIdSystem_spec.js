@@ -401,7 +401,7 @@ describe('Parrable ID System', function() {
     });
   });
 
-  describe('timezone filtering', function() {
+  describe.only('timezone filtering', function() {
     before(function() {
       sinon.stub(Intl, 'DateTimeFormat');
     });
@@ -514,6 +514,20 @@ describe('Parrable ID System', function() {
         timezoneFilter: {
           allowedZones: [ timezone ],
           blockedZones: [ timezone ]
+        }
+      } })).to.equal(null);
+      expect(resolvedOptions.called).to.equal(true);
+    });
+
+    it('does not permit an impression from and allowed zone but browser can not determine timezone', function() {
+      const allowedZone = 'America/New_York';
+      const resolvedOptions = sinon.stub().returns({ timeZone: null });
+      Intl.DateTimeFormat.returns({ resolvedOptions });
+
+      expect(parrableIdSubmodule.getId({ params: {
+        partners: 'prebid-test',
+        timezoneFilter: {
+          allowedZones: [ allowedZone ]
         }
       } })).to.equal(null);
       expect(resolvedOptions.called).to.equal(true);
