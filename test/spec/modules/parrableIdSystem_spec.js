@@ -401,7 +401,7 @@ describe('Parrable ID System', function() {
     });
   });
 
-  describe.only('timezone filtering', function() {
+  describe('timezone filtering', function() {
     before(function() {
       sinon.stub(Intl, 'DateTimeFormat');
     });
